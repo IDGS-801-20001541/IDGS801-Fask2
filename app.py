@@ -40,9 +40,7 @@ def calcular():
         suma = suma + int(valor)
         cant = len(numberList)
         pro = suma / cant
-        
         resultadoNumR=[]
-    
     for valor1 in number:
         repeticion=number.count(valor1)
         resultadoNumR.append("{} aparece {} veces".format(valor1,repeticion))
