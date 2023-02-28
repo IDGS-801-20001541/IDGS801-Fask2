@@ -74,20 +74,37 @@ def cookie():
     response= make_response(render_template('cookie.html',form=reg_user))
     return response 
 
+
 @app.route("/traductor",methods=['GET','POST'])
 def traductor():
-    palabras=forms.diccionario(request.form) 
-    response= make_response(render_template('traductor.html',form=palabras))
-    if request.method=='POST' and palabras.validate():
-        ingles=palabras.ingles.data
-        espaniol = palabras.español.data
-        print(ingles +" "+ espaniol)
-    file=open('traductor.txt','w') 
-    file.write('\n'+ingles)
-    file.write('\n'+espaniol)
-    
-    return response
-
+    palabra={}
+    with open('traductor.txt', 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                color, translation = line.split('=')
+                palabra[color] = translation
+    translation = ""
+    if request.method == 'POST':
+        if 'txtcolorEs' in request.form and 'txtcolorIn' in request.form:
+            spanish_color = request.form['txtcolorEs']
+            english_color = request.form['txtcolorIn']
+            palabra[spanish_color] = english_color
+            with open('traductor.txt', 'a') as f:
+                f.write(f"{spanish_color.lower()}={english_color.lower()}\n")
+                f.write(f"{english_color.lower()}={spanish_color.lower()}\n")
+            flash("Palabra añadida con éxito.")
+        elif 'color' in request.form and 'rbgidioma' in request.form:
+            color = request.form['color'].lower()
+            language = request.form['rbgidioma']
+            if color in palabra:
+                if language == 'rbingles':
+                    translation = palabra[color]
+                if language == 'rbespaniol':
+                    translation = palabra[color]
+            else:
+                flash(f"la palabra {color} no está registrado.")
+    return render_template('traductor.html', translation=translation, form=request)
 
 
 

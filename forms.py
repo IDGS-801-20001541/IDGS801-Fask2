@@ -38,6 +38,7 @@ class diccionario(Form):
     ingles= StringField('Ingles',[
         validators.DataRequired(message='El campo es requerido')
     ])
-
+   
+   
 class lista(Form):
     numero=IntegerField('Numero')

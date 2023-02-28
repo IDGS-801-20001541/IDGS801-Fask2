@@ -1,0 +1,4 @@
+correr=run
+run=correr
+fallen=caer
+caer=fallen
